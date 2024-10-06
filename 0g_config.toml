@@ -15,7 +15,7 @@
 proxy_app = "tcp://127.0.0.1:26658"
 
 # A custom human readable name for this node
-moniker = "Stake"
+moniker = "Zstake"
 
 # If this node is many blocks behind the tip of the chain, BlockSync
 # allows them to catchup quickly by downloading blocks in parallel
@@ -115,7 +115,7 @@ grpc_laddr = ""
 # 0 - unlimited.
 # Should be < {ulimit -Sn} - {MaxNumInboundPeers} - {MaxNumOutboundPeers} - {N of wal, db and other open files}
 # 1024 - 40 - 10 - 50 = 924 = ~900
-grpc_max_open_connections = 900
+grpc_max_open_connections = 50
 
 # Activate unsafe RPC commands like /dial_seeds and /unsafe_flush_mempool
 unsafe = false
@@ -127,12 +127,12 @@ unsafe = false
 # 0 - unlimited.
 # Should be < {ulimit -Sn} - {MaxNumInboundPeers} - {MaxNumOutboundPeers} - {N of wal, db and other open files}
 # 1024 - 40 - 10 - 50 = 924 = ~900
-max_open_connections = 900
+max_open_connections = 50
 
 # Maximum number of unique clientIDs that can /subscribe
 # If you're using /broadcast_tx_commit, set to the estimated maximum number
 # of broadcast_tx_commit calls per block.
-max_subscription_clients = 100
+max_subscription_clients = 50
 
 # Maximum number of unique queries a given client can /subscribe to
 # If you're using GRPC (or Local RPC client) and /broadcast_tx_commit, set to
@@ -223,10 +223,10 @@ addr_book_file = "config/addrbook.json"
 addr_book_strict = true
 
 # Maximum number of inbound peers
-max_num_inbound_peers = 40
+max_num_inbound_peers = 80
 
 # Maximum number of outbound peers to connect to, excluding persistent peers
-max_num_outbound_peers = 10
+max_num_outbound_peers = 80
 
 # List of node IDs, to which a connection will be (re)established ignoring any existing limits
 unconditional_peer_ids = ""
@@ -247,7 +247,7 @@ send_rate = 5120000
 recv_rate = 5120000
 
 # Set true to enable the peer-exchange reactor
-pex = true
+pex = false
 
 # Seed mode, in which node constantly crawls the network and looks for
 # peers. If another node asks it for addresses, it responds and disconnects.
@@ -262,8 +262,8 @@ private_peer_ids = ""
 allow_duplicate_ip = false
 
 # Peer connection configuration.
-handshake_timeout = "20s"
-dial_timeout = "3s"
+handshake_timeout = "60s"
+dial_timeout = "20s"
 
 #######################################################
 ###          Mempool Configuration Option          ###
@@ -295,7 +295,7 @@ size = 5000
 # Limit the total size of all txs in the mempool.
 # This only accounts for raw transactions (e.g. given 1MB transactions and
 # max_txs_bytes=5MB, mempool will only accept 5 transactions).
-max_txs_bytes = 1073741824
+max_txs_bytes = 20000000
 
 # Size of the cache (used to filter transactions we saw earlier) in transactions
 cache_size = 10000
@@ -307,7 +307,7 @@ keep-invalid-txs-in-cache = false
 
 # Maximum size of a single transaction.
 # NOTE: the max size of a tx transmitted over the network is {max_tx_bytes}.
-max_tx_bytes = 1048576
+max_tx_bytes = 20000000
 
 # Maximum size of a batch of transactions to send to a peer
 # Including space needed by encoding (one varint per transaction).
@@ -403,21 +403,21 @@ version = "v0"
 wal_file = "data/cs.wal/wal"
 
 # How long we wait for a proposal block before prevoting nil
-timeout_propose = "3s"
+timeout_propose = "1s"
 # How much timeout_propose increases with each round
-timeout_propose_delta = "500ms"
+timeout_propose_delta = "0ms"
 # How long we wait after receiving +2/3 prevotes for “anything” (ie. not a single block or nil)
-timeout_prevote = "1s"
+timeout_prevote = "300s"
 # How much the timeout_prevote increases with each round
-timeout_prevote_delta = "500ms"
+timeout_prevote_delta = "300ms"
 # How long we wait after receiving +2/3 precommits for “anything” (ie. not a single block or nil)
-timeout_precommit = "1s"
+timeout_precommit = "500ms"
 # How much the timeout_precommit increases with each round
-timeout_precommit_delta = "500ms"
+timeout_precommit_delta = "300ms"
 # How long we wait after committing a block, before starting on the new
 # height (this gives us a chance to receive some more precommits, even
 # though we already have +2/3).
-timeout_commit = "5s"
+timeout_commit = "1s"
 
 # How many blocks to look back to check existence of the node's consensus votes before joining consensus
 # When non-zero, the node will panic upon restart
@@ -463,7 +463,7 @@ discard_abci_responses = false
 # 		- When "kv" is chosen "tx.height" and "tx.hash" will always be indexed.
 #   3) "psql" - the indexer services backed by PostgreSQL.
 # When "kv" or "psql" is chosen "tx.height" and "tx.hash" will always be indexed.
-indexer = "kv"
+indexer = "null"
 
 # The PostgreSQL connection configuration, the connection format:
 #   postgresql://<user>:<password>@<host>:<port>/<db>?<opts>
