@@ -37,12 +37,6 @@ rm -rf $HOME/0g-storage-node/run/config.toml
 echo "Downloading new config file..."
 curl -o $HOME/0g-storage-node/run/config.toml https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/0g_storage_config.toml
 
-echo "Enter your miner key:"
-read MINER_KEY
-
-echo "Updating miner_key in config.toml..."
-sed -i "s/miner_key = \"\"/miner_key = \"$MINER_KEY\"/" $HOME/0g-storage-node/run/config.toml
-
 echo "Creating systemd service file..."
 sudo tee /etc/systemd/system/zgs.service > /dev/null <<EOF
 [Unit]
@@ -72,6 +66,8 @@ rm -r $HOME/0g-storage-node/run/db && rm -r $HOME/0g-storage-node/run/log && rm 
 
 echo "Extracting snapshot..."
 lz4 -c -d storage_0gchain_snapshot.lz4 | pv | tar -x -C $HOME/0g-storage-node/run
+
+nano $HOME/0g-storage-node/run/config.toml
 
 echo "Reloading systemd daemon, enabling and starting the service..."
 sudo systemctl daemon-reload && sudo systemctl enable zgs && sudo systemctl start zgs
