@@ -10,7 +10,7 @@ echo "Installing Rust..."
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 echo "Removing existing 0g-storage-node directory..."
-sudo systemctel stop zgs && rm -r $HOME/0g-storage-node
+sudo systemctl stop zgs && rm -r $HOME/0g-storage-node
 
 echo "Cloning the repository..."
 git clone -b v0.5.0 https://github.com/0glabs/0g-storage-node.git
