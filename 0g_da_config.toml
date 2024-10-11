@@ -1,0 +1,30 @@
+log_level = "info"
+
+data_path = "./db/"
+
+# path to downloaded params folder
+encoder_params_dir = "params/" 
+
+# grpc server listen address
+grpc_listen_address = "0.0.0.0:34000"
+# chain eth rpc endpoint
+eth_rpc_endpoint = "https://evmrpc-testnet.0g.ai"
+# public grpc service socket address to register in DA contract
+# ip:34000 (keep same port as the grpc listen address)
+# or if you have dns, fill your dns
+socket_address = "VPS ip:34000"
+
+# data availability contract to interact with
+da_entrance_address = "0x857C0A28A8634614BB2C96039Cf4a20AFF709Aa9"
+# deployed block number of da entrance contract
+start_block_number = 940000
+
+# signer BLS private key
+signer_bls_private_key = "BLS Key"
+# signer eth account private key
+signer_eth_private_key = "your private key"
+# miner eth account private key, (could be the same as `signer_eth_private_key`, but not recommended)
+miner_eth_private_key = "your private key"
+
+# whether to enable data availability sampling
+enable_das = "true"
