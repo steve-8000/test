@@ -2,8 +2,6 @@
 
 
 
-echo -e "\033[31m"Test"\033[0m"
-
 cd $HOME/0gchaind
 0gchaind version
 
