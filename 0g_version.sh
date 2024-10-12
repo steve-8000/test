@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# ANSI escape code for yellow text
-YELLOW='\033
 
-echo "\033[31m"Checking version of 0gchain..."\033[31m"
+echo -e "\033[31m"Checking version of 0gchain..."\033[31m"
 cd $HOME/0gchaind
 0gchaind version
 
