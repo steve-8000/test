@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "\033[31m"Checking version of 0gchaind..."\033[0m"
+echo -e "\033[31m"Checking version of 0gchaind..."\033[0m"
 cd $HOME/0gchaind
 0gchaind version
 
