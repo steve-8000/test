@@ -3,7 +3,7 @@
 # ANSI escape code for yellow text
 YELLOW='\033
 
-echo "Checking version of 0gchain..."
+echo "\033[31m"Checking version of 0gchain..."\033[31m"
 cd $HOME/0gchaind
 0gchaind version
 
