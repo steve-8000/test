@@ -9,12 +9,10 @@ commands=(
 )
 
 # 무한 루프
-while true; do
     for cmd in "${commands[@]}"; do
         echo "실행 중: $cmd"
         eval $cmd &
         sleep 2
         pkill -P $$
-    done
 done
 
