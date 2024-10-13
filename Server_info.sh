@@ -1,12 +1,12 @@
 #!/bin/bash
 
-echo "=== CPU 정보 ==="
+echo "=== CPU info ==="
 lscpu | grep -E 'Model name|Socket|Thread|Core|CPU MHz'
 
 echo ""
-echo "=== 메모리 정보 ==="
+echo "=== Memory info ==="
 free -h
 
 echo ""
-echo "=== 디스크 정보 ==="
+echo "=== Disk info ==="
 df -h
