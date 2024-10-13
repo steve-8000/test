@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo -e "\033
-
 echo "Checking version of 0gchaind..."
 cd $HOME/0gchaind
 0gchaind version
