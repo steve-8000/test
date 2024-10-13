@@ -23,3 +23,4 @@ git log --decorate=short --oneline | grep "tag: v" | head -n 1
 echo "Checking version for 0g-storage-kv..."
 cd $HOME/0g-storage-kv
 git log --decorate=short --oneline | grep "tag: v" | head -n 1
+cd
