@@ -1,5 +1,9 @@
 #!/bin/bash
 
+cd
+sudo systemctl stop 0gkv
+rm -r 0g-storage-kv
+
 echo "Updating system..."
 sudo apt update && sudo apt upgrade -y
 
