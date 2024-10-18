@@ -106,7 +106,7 @@ sleep 1
 echo done
 
 # create service file
-sudo tee /etc/systemd/system/0gchaind.service > /dev/null <<EOF
+sudo tee /etc/systemd/system/0gd.service > /dev/null <<EOF
 [Unit]
 Description=og node
 After=network-online.target
