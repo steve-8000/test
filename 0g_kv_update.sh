@@ -29,7 +29,7 @@ git fetch --all --tags
 
 # Checkout the specific commit
 echo "Checking out commit f11f432..."
-git checkout e7c7379
+git checkout bf66c78
 
 # Update submodules
 echo "Updating submodules..."
