@@ -21,7 +21,7 @@ kv_db_dir = "kv.DB"
 #######################################################################
 
 blockchain_rpc_endpoint = "https://rpc.ankr.com/0g_newton"
-log_contract_address = "0xbD2C3F0E65eDF5582141C35969d66e34629cC768"
+log_contract_address = "0x0460aA47b41a66694c0a73f667a1b795A5ED3556"
 log_sync_start_block_number = 595059
 
 #######################################################################
