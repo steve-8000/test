@@ -123,12 +123,13 @@ EOF
 
 printGreen "8. Downloading snapshot and starting node..." && sleep 1
 # reset and download snapshot
-0gchaind tendermint unsafe-reset-all --home $HOME/.0gchain
-if curl -s --head curl https://server-5.itrocket.net/testnet/og/og_2024-10-17_1521680_snap.tar.lz4 | head -n 1 | grep "200" > /dev/null; then
-curl https://server-5.itrocket.net/testnet/og/og_2024-10-17_1521680_snap.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.0gchain
-else
-echo "no snapshot founded"
-fi
+0gchaind tendermint unsafe-reset-all --home $HOME/.0gchain --keep-addr-book
+cd $HOME
+cp ~/.0gchain/data/priv_validator_state.json ~/.0gchain/priv_validator_state.json.backup
+sudo apt-get install wget lz4 aria2 pv -y
+rm -f light_0gchain_snapshot.lz4
+aria2c -x 16 -s 16 -k 1M https://josephtran.co/light_0gchain_snapshot.lz4
+lz4 -dc light_0gchain_snapshot.lz4 | pv | tar -xf - -C $HOME/.0gchain
 
 # enable and start service
 sudo systemctl daemon-reload
