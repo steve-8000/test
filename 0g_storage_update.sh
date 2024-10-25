@@ -16,7 +16,7 @@ git stash
 git fetch --all --tags
 
 # Checkout the specific commit
-git checkout cebc3c8
+git checkout da903fe
 
 # Update submodules
 git submodule update --init
