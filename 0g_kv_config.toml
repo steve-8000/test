@@ -20,7 +20,7 @@ kv_db_dir = "kv.DB"
 ###                     Log Sync Config Options                     ###
 #######################################################################
 
-blockchain_rpc_endpoint = "https://evmrpc-testnet.0g.ai"
+blockchain_rpc_endpoint = "https://evm-archive-0g.josephtran.xyz"
 log_contract_address = "0xbD2C3F0E65eDF5582141C35969d66e34629cC768"
 log_sync_start_block_number = 595059
 
