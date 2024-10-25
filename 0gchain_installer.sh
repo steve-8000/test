@@ -127,9 +127,10 @@ printGreen "8. Downloading snapshot and starting node..." && sleep 1
 cd $HOME
 cp ~/.0gchain/data/priv_validator_state.json ~/.0gchain/priv_validator_state.json.backup
 sudo apt-get install wget lz4 aria2 pv -y
-rm -f light_0gchain_snapshot.lz4
-aria2c -x 16 -s 16 -k 1M https://josephtran.co/light_0gchain_snapshot.lz4
-lz4 -dc light_0gchain_snapshot.lz4 | pv | tar -xf - -C $HOME/.0gchain
+rm -f 0gchain_snapshot.lz4
+aria2c -x 16 -s 16 -k 1M https://josephtran.co/0gchain_snapshot.lz4
+lz4 -dc 0gchain_snapshot.lz4 | pv | tar -xf - -C $HOME/.0gchain
+cp ~/.0gchain/priv_validator_state.json.backup ~/.0gchain/data/priv_validator_state.json
 
 # enable and start service
 sudo systemctl daemon-reload
