@@ -23,7 +23,7 @@ echo "Fetching all tags..."
 git fetch --all --tags
 
 echo "Checking out specific commit..."
-git checkout 9eea71e
+git checkout 0711851
 
 echo "Updating submodules..."
 git submodule update --init
