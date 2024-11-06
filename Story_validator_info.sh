@@ -140,7 +140,7 @@ def sign_message(private_key, message):
         print(f"{RED}Invalid private key format. Please verify your key.{NC}")
         return None
 def send_post_request(data):
-    url = "https://story-testnet-api.zstake.xyz/validators/verify"
+    url = "https://api.testnet.storyscan.app/validators/verify"
     headers = {'Content-Type': 'application/json'}
     try:
         response = requests.post(url, headers=headers, json=data)
