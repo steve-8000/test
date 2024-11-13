@@ -23,7 +23,7 @@ echo "Fetching all tags..."
 git fetch --all --tags
 
 echo "Checking out specific commit..."
-git checkout 0f36f3e
+git checkout 1046fed
 
 echo "Updating submodules..."
 git submodule update --init
@@ -54,18 +54,6 @@ LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target
 EOF
-
-echo "Installing additional packages..."
-sudo apt-get install wget lz4 aria2 pv -y
-
-echo "Downloading snapshot..."
-aria2c -x 16 -s 16 https://snapshot.zstake.xyz/downloads/storage_0gchain_snapshot.lz4
-
-echo "Removing old database, log, and network directories..."
-rm -r $HOME/0g-storage-node/run/db && rm -r $HOME/0g-storage-node/run/log && rm -r $HOME/0g-storage-node/run/network
-
-echo "Extracting snapshot..."
-lz4 -c -d storage_0gchain_snapshot.lz4 | pv | tar -x -C $HOME/0g-storage-node/run
 
 nano $HOME/0g-storage-node/run/config.toml
 
