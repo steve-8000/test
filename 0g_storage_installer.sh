@@ -13,7 +13,7 @@ echo "Removing existing 0g-storage-node directory..."
 sudo systemctl stop zgs && rm -r $HOME/0g-storage-node
 
 echo "Cloning the repository..."
-git clone -b v0.7.5 https://github.com/0glabs/0g-storage-node.git
+git clone -b v0.7.6 https://github.com/0glabs/0g-storage-node.git
 cd $HOME/0g-storage-node
 
 echo "Stashing any local changes..."
@@ -23,7 +23,7 @@ echo "Fetching all tags..."
 git fetch --all --tags
 
 echo "Checking out specific commit..."
-git checkout c4845f9
+git checkout a83e518
 
 echo "Updating submodules..."
 git submodule update --init
