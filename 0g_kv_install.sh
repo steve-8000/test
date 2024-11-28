@@ -8,7 +8,7 @@ echo "Updating system..."
 sudo apt update && sudo apt upgrade -y
 
 echo "Cloning repository..."
-git clone -b v1.2.2 https://github.com/0glabs/0g-storage-kv.git
+git clone -b v1.3.0 https://github.com/0glabs/0g-storage-kv.git
 cd $HOME/0g-storage-kv
 
 echo "Stashing any local changes..."
@@ -18,7 +18,7 @@ echo "Fetching all tags..."
 git fetch --all --tags
 
 echo "Checking out commit 0f1510a..."
-git checkout 99c91d9
+git checkout a074ef9
 
 echo "Updating submodules..."
 git submodule update --init
