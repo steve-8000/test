@@ -8,7 +8,7 @@ echo "Updating system..."
 sudo apt update && sudo apt upgrade -y
 
 echo "Cloning repository..."
-git clone -b v1.3.0 https://github.com/0glabs/0g-storage-kv.git
+git clone -b v1.4.0 https://github.com/0glabs/0g-storage-kv.git
 cd $HOME/0g-storage-kv
 
 echo "Stashing any local changes..."
