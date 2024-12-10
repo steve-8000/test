@@ -5,7 +5,7 @@ echo "Installing necessary packages..."
 cd && rm -rf $HOME/storage_0gchain_snapshot.lz4 && sudo apt-get install wget lz4 aria2 pv -y
 # Download the snapshot with aria2
 echo "Downloading the snapshot..."
-aria2c -x 16 -s 16 https://snapshot1.zstake.xyz/downloads/storage_0gchain_snapshot.lz4
+aria2c -x 16 -s 16 http://snapshot_2.zstake.xyz/downloads/storage_0gchain_snapshot.lz4
 
 # Stop the zgs service
 echo "Stopping the zgs service..."
