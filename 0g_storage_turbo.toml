@@ -165,7 +165,7 @@ mine_contract_address = "0x6815F41019255e00D6F34aAB8397a6Af5b6D806f"
 #
 # Note, the corresponding address should have enough tokens to pay
 # transaction gas fee.
-# miner_key = ""
+miner_key = ""
 
 # Period for querying mine context on chain (in seconds)
 #
