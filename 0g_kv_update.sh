@@ -14,7 +14,7 @@ rm -r $HOME/0g-storage-kv
 
 # Clone the repository
 echo "Cloning 0g-storage-kv repository..."
-git clone -b v1.3.0 https://github.com/0glabs/0g-storage-kv.git
+git clone -b v1.4.0 https://github.com/0glabs/0g-storage-kv.git
 
 # Change to the repository directory
 cd $HOME/0g-storage-kv
@@ -29,7 +29,7 @@ git fetch --all --tags
 
 # Checkout the specific commit
 echo "Checking out commit f11f432..."
-git checkout a074ef9
+git checkout 1e7c207
 
 # Update submodules
 echo "Updating submodules..."
