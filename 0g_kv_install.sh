@@ -40,8 +40,8 @@ After=network.target
 
 [Service]
 User=root
-WorkingDirectory=/root/0g-storage-kv/run
-ExecStart=/root/0g-storage-kv/target/release/zgs_kv --config /root/0g-storage-kv/run/config.toml
+WorkingDirectory=$HOME/0g-storage-kv/run
+ExecStart=$HOME/0g-storage-kv/target/release/zgs_kv --config $HOME/0g-storage-kv/run/config.toml
 Restart=always
 RestartSec=10
 LimitNOFILE=65535
