@@ -4,7 +4,7 @@ echo "Updating package lists..."
 sudo apt-get update
 
 echo "Installing necessary packages..."
-sudo apt-get install clang cmake build-essential -y
+sudo apt-get install clang cmake build-essential openssl pkg-config libssl-dev
 
 echo "Installing Rust..."
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
