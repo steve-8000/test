@@ -77,7 +77,7 @@ network_boot_nodes = ["/ip4/47.251.88.201/udp/1234/p2p/16Uiu2HAmFGrDV8wKToa1dd8u
 #######################################################################
 
 # RPC endpoint to sync event logs on EVM compatible blockchain.
-# blockchain_rpc_endpoint = "http://127.0.0.1:8545"
+blockchain_rpc_endpoint = "https://evmrpc-testnet.0g.ai"
 
 # Flow contract address to sync event logs.
 log_contract_address = "0x0460aA47b41a66694c0a73f667a1b795A5ED3556"
