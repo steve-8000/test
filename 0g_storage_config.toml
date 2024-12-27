@@ -165,7 +165,7 @@ mine_contract_address = "0x1785c8683b3c527618eFfF78d876d9dCB4b70285"
 #
 # Note, the corresponding address should have enough tokens to pay
 # transaction gas fee.
-miner_key = "your key"
+# miner_key = "your key"
 
 #######################################################################
 ###                   Sharding Config Options                       ###
