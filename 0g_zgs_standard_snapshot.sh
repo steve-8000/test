@@ -16,7 +16,7 @@ case $snapshot_choice in
     snapshot_url="http://snapshot_2.zstake.xyz/downloads/storage_0gchain_snapshot.lz4"
     ;;
   2)
-    snapshot_url="http://snapshot_3.zstake.xyz/downloads/storage_0gchain_snapshot.lz4"
+    snapshot_url="http://snapshot_2.zstake.xyz/downloads/storage_0gchain_snapshot.lz4"
     ;;
   *)
     echo "Invalid choice. Exiting."
