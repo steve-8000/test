@@ -129,8 +129,7 @@ EOF
 show_logs() {
     echo "Displaying logs..."
     sudo systemctl daemon-reload && sudo systemctl enable zgs && sudo systemctl start zgs
-    tail -f ~/0g-storage-node/run/log/zgs.log.$(TZ=UTC date +%Y-%m-%d) & 
-    source <(curl -s https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/zgs_test.sh)
+    tail -f ~/0g-storage-node/run/log/zgs.log.$(TZ=UTC date +%Y-%m-%d)
 }
 
 # Main loop
