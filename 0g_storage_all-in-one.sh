@@ -7,8 +7,9 @@ show_menu() {
     echo "2. Clear cache"
     echo "3. Set Miner Key"
     echo "4. Select RPC Endpoint"
-    echo "5. Node Run & Show Logs"
-    echo "6. Exit"
+    echo "5. Reset Config.toml & Systemctl"
+    echo "6. Node Run & Show Logs"
+    echo "7. Exit"
     echo "============================"
 }
 
@@ -29,7 +30,6 @@ install_node() {
     cargo build --release
     rm -rf $HOME/0g-storage-node/run/config.toml
     curl -o $HOME/0g-storage-node/run/config.toml https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/0g_storage_turbo.toml
-    nano $HOME/0g-storage-node/run/config.toml
 
     sudo tee /etc/systemd/system/zgs.service > /dev/null <<EOF
 [Unit]
@@ -66,6 +66,9 @@ set_miner_key() {
     echo "Please enter your Miner Key:"
     read miner_key
     sed -i "s|^miner_key = .*|miner_key = \"$miner_key\"|g" ~/0g-storage-node/run/config.toml
+
+    sudo systemctl daemon-reload
+    sudo systemctl enable zgs
     sudo systemctl stop zgs
     sudo systemctl daemon-reload
     sudo systemctl enable zgs
@@ -94,7 +97,35 @@ select_rpc() {
     echo "RPC Endpoint set to $rpc. You can start the service with 'sudo systemctl start zgs'."
 }
 
-# Function for Option 5: Show Logs
+# Function for Option 5: Reset Config.toml & Systemctl
+reset_config_systemctl() {
+    echo "Resetting Config.toml and Systemctl..."
+    rm -rf $HOME/0g-storage-node/run/config.toml
+    curl -o $HOME/0g-storage-node/run/config.toml https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/0g_storage_turbo.toml
+
+    sudo tee /etc/systemd/system/zgs.service > /dev/null <<EOF
+[Unit]
+Description=ZGS Node
+After=network.target
+
+[Service]
+User=$USER
+WorkingDirectory=$HOME/0g-storage-node/run
+ExecStart=$HOME/0g-storage-node/target/release/zgs_node --config $HOME/0g-storage-node/run/config.toml
+Restart=on-failure
+RestartSec=10
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    sudo systemctl daemon-reload
+    sudo systemctl enable zgs
+    echo "Config.toml and Systemctl have been reset. You can start the service with 'sudo systemctl start zgs'."
+}
+
+# Function for Option 6: Show Logs
 show_logs() {
     echo "Displaying logs..."
     sudo systemctl daemon-reload && sudo systemctl enable zgs && sudo systemctl start zgs
@@ -105,14 +136,15 @@ show_logs() {
 # Main loop
 while true; do
     show_menu
-    read -p "Select an option (1-6): " choice
+    read -p "Select an option (1-7): " choice
     case $choice in
         1) install_node ;;
         2) clear_cache ;;
         3) set_miner_key ;;
         4) select_rpc ;;
-        5) show_logs ;;
-        6) echo "Exiting..."; exit 0 ;;
+        5) reset_config_systemctl ;;
+        6) show_logs ;;
+        7) echo "Exiting..."; exit 0 ;;
         *) echo "Invalid option. Please try again." ;;
     esac
     echo ""
