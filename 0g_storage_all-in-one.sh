@@ -2,7 +2,7 @@
 
 # Function to display the menu
 show_menu() {
-    echo "===== Installation Menu ====="
+    echo "===== Zstake Storage Node Installation Menu ====="
     echo "1. Install 0g-storage-node"
     echo "2. Clear cache"
     echo "3. Set Miner Key"
