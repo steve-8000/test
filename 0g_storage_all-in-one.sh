@@ -7,7 +7,7 @@ show_menu() {
     echo "2. Clear cache"
     echo "3. Set Miner Key"
     echo "4. Select RPC Endpoint"
-    echo "5. Show Logs"
+    echo "5. Node Run & Show Logs"
     echo "6. Exit"
     echo "============================"
 }
@@ -97,6 +97,7 @@ select_rpc() {
 # Function for Option 5: Show Logs
 show_logs() {
     echo "Displaying logs..."
+    sudo systemctl daemon-reload && sudo systemctl enable zgs && sudo systemctl start zgs
     tail -f ~/0g-storage-node/run/log/zgs.log.$(TZ=UTC date +%Y-%m-%d) & 
     source <(curl -s https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/zgs_test.sh)
 }
