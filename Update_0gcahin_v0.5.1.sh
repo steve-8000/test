@@ -61,7 +61,7 @@ sudo mv $HOME/go/bin/0gchaind /usr/local/bin/0gchaind || {
 
 # Navigate to the binary directory (optional, since we moved it)
 cd $HOME/go/bin
-0gchaind --version
+0gchaind version
 # Restart the 0gd service
 echo "Restarting 0gd service..."
 sudo systemctl restart 0gd || {
