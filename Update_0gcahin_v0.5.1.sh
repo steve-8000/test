@@ -68,7 +68,3 @@ sudo systemctl restart 0gd || {
     echo -e "${RED}Failed to restart 0gd service. Check service configuration.${NC}"
     exit 1
 }
-
-# Tail the log file
-echo -e "${GREEN}Update complete! Tailing the log file...${NC}"
-tail -f $HOME/.0gchain/log/chain.log
