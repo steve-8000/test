@@ -27,15 +27,7 @@ check_file() {
     return 0
 }
 
-echo "Checking version of 0gchaind..."
-if check_directory "$HOME/0gchaind"; then
-    cd "$HOME/0gchaind" || exit 1
-    if command_exists "0gchaind"; then
-        0gchaind version || echo "Error: Failed to get 0gchaind version."
-    fi
-fi
-
-echo "Checking version for 0g-storage-node..."
+echo "Checking version of 0g-storage-node..."
 if check_directory "$HOME/0g-storage-node"; then
     cd "$HOME/0g-storage-node" || exit 1
     if command_exists "git"; then
@@ -43,38 +35,6 @@ if check_directory "$HOME/0g-storage-node"; then
         git log --decorate=short --oneline | grep "tag: v" | head -n 1 || echo "Error: No tagged version found or git command failed."
         echo "Latest commit:"
         git log -1 --pretty=oneline || echo "Error: Failed to get latest commit."
-    fi
-fi
-
-echo "Checking version for 0g-storage-client..."
-if check_directory "$HOME/0g-storage-client"; then
-    cd "$HOME/0g-storage-client" || exit 1
-    if command_exists "git"; then
-        git log --decorate=short --oneline | grep "tag: v" | head -n 1 || echo "Error: No tagged version found or git command failed."
-    fi
-fi
-
-echo "Checking version for 0g-da-node..."
-if check_directory "$HOME/0g-da-node"; then
-    cd "$HOME/0g-da-node" || exit 1
-    if command_exists "git"; then
-        git log --decorate=short --oneline | grep "tag: v" | head -n 1 || echo "Error: No tagged version found or git command failed."
-    fi
-fi
-
-echo "Checking version for 0g-da-client..."
-if check_directory "$HOME/0g-da-client"; then
-    cd "$HOME/0g-da-client" || exit 1
-    if command_exists "git"; then
-        git log --decorate=short --oneline | grep "tag: v" | head -n 1 || echo "Error: No tagged version found or git command failed."
-    fi
-fi
-
-echo "Checking version for 0g-storage-kv..."
-if check_directory "$HOME/0g-storage-kv"; then
-    cd "$HOME/0g-storage-kv" || exit 1
-    if command_exists "git"; then
-        git log --decorate=short --oneline | grep "tag: v" | head -n 1 || echo "Error: No tagged version found or git command failed."
     fi
 fi
 
