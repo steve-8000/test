@@ -2,6 +2,7 @@
 
 show_menu() {
     echo "===== Zstake Storage Node Installation Menu ====="
+    echo "0G Storage Node V0.8.7"
     echo "1. Install 0g-storage-node"
     echo "2. Update 0g-storage-node"
     echo "3. Turbo Mode(Reset Config.toml & Systemctl)"
