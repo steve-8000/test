@@ -28,7 +28,6 @@ install_node() {
     cargo build --release
     rm -rf $HOME/0g-storage-node/run/config.toml
     curl -o $HOME/0g-storage-node/run/config.toml https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/0g_storage_turbo.toml
-
     sudo tee /etc/systemd/system/zgs.service > /dev/null <<EOF
 [Unit]
 Description=ZGS Node
@@ -45,7 +44,6 @@ LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target
 EOF
-
     sudo systemctl daemon-reload
     sudo systemctl enable zgs
     echo "Installation completed. You can start the service with 'sudo systemctl start zgs'."
@@ -72,7 +70,6 @@ reset_config_systemctl() {
     echo "Resetting Config.toml and Systemctl (Turbo Mode)..."
     rm -rf $HOME/0g-storage-node/run/config.toml
     curl -o $HOME/0g-storage-node/run/config.toml https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/0g_storage_turbo.toml
-
     sudo tee /etc/systemd/system/zgs.service > /dev/null <<EOF
 [Unit]
 Description=ZGS Node
@@ -89,7 +86,6 @@ LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target
 EOF
-
     sudo systemctl daemon-reload
     sudo systemctl enable zgs
     echo "Config.toml and Systemctl have been reset to Turbo Mode. You can start the service with 'sudo systemctl start zgs'."
