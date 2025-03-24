@@ -2,14 +2,14 @@
 
 show_menu() {
     echo "===== Zstake Storage Node Installation Menu ====="
-    echo "0G Storage Node V0.8.7"
     echo "1. Install 0g-storage-node"
     echo "2. Update 0g-storage-node"
     echo "3. Turbo Mode(Reset Config.toml & Systemctl)"
     echo "4. Standard Mode(Reset Config.toml & Systemctl)"
-    echo "5. Set Miner Key"
-    echo "6. Node Run & Show Logs"
-    echo "7. Exit"
+    echo "5. Select RPC Endpoint"
+    echo "6. Set Miner Key"
+    echo "7. Node Run & Show Logs"
+    echo "8. Exit"
     echo "============================"
 }
 
@@ -92,12 +92,31 @@ EOF
     echo "Config.toml and Systemctl have been reset to Turbo Mode. You can start the service with 'sudo systemctl start zgs'."
 }
 
-select_rpc() {
+standard_mode_reset() {
     echo "Resetting to Standard Mode..."
     rm -rf $HOME/0g-storage-node/run/config.toml
     curl -o $HOME/0g-storage-node/run/config.toml https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/0g_storage_config.toml
     nano $HOME/0g-storage-node/run/config.toml
     echo "Config.toml has been reset to Standard Mode and opened for editing. Please save your changes in nano (Ctrl+O, Enter, Ctrl+X)."
+}
+
+select_rpc() {
+    echo "Select an RPC Endpoint:"
+    echo "1. https://evmrpc-testnet.0g.ai"
+    echo "2. https://16600.rpc.thirdweb.com"
+    echo "3. https://og-testnet-evm.itrocket.net:443"
+    read -p "Enter your choice (1-3): " rpc_choice
+    case $rpc_choice in
+        1) rpc="https://evmrpc-testnet.0g.ai" ;;
+        2) rpc="https://16600.rpc.thirdweb.com" ;;
+        3) rpc="https://og-testnet-evm.itrocket.net:443" ;;
+        *) echo "Invalid choice. Exiting."; return ;;
+    esac
+    sed -i "s|^blockchain_rpc_endpoint = .*|blockchain_rpc_endpoint = \"$rpc\"|g" ~/0g-storage-node/run/config.toml
+    sudo systemctl stop zgs
+    sudo systemctl daemon-reload
+    sudo systemctl enable zgs
+    echo "RPC Endpoint set to $rpc. You can start the service with 'sudo systemctl start zgs'."
 }
 
 set_miner_key() {
@@ -120,15 +139,16 @@ show_logs() {
 
 while true; do
     show_menu
-    read -p "Select an option (1-7): " choice
+    read -p "Select an option (1-8): " choice
     case $choice in
         1) install_node ;;
         2) update_node ;;
         3) reset_config_systemctl ;;
-        4) select_rpc ;;
-        5) set_miner_key ;;
-        6) show_logs ;;
-        7) echo "Exiting..."; exit 0 ;;
+        4) standard_mode_reset ;;
+        5) select_rpc ;;
+        6) set_miner_key ;;
+        7) show_logs ;;
+        8) echo "Exiting..."; exit 0 ;;
         *) echo "Invalid option. Please try again." ;;
     esac
     echo ""
