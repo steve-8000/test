@@ -8,7 +8,7 @@ show_menu() {
     echo "4. Standard Mode(Reset Config.toml & Systemctl)"
     echo "5. Select RPC Endpoint"
     echo "6. Set Miner Key"
-    echo "7. Snapshot Install (Turbo, Standard)"
+    echo "7. Snapshot Install (Standard)"
     echo "8. Node Run & Show Logs"
     echo "9. Exit"
     echo "============================"
@@ -134,10 +134,9 @@ set_miner_key() {
 snapshot_install() {
     echo "===== Snapshot Install Menu ====="
     echo "1. Standard Mode Snapshot Install"
-    echo "2. Turbo Mode Snapshot Install"
-    echo "3. Back to Main Menu"
+    echo "2. Back to Main Menu"
     echo "============================"
-    read -p "Select an option (1-3): " snap_choice
+    read -p "Select an option (1-2): " snap_choice
     case $snap_choice in
         1) 
             echo "Installing Standard Mode Snapshot..."
@@ -145,11 +144,6 @@ snapshot_install() {
             echo "Standard Mode Snapshot installation completed."
             ;;
         2) 
-            echo "Installing Turbo Mode Snapshot..."
-            source <(curl -s https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/0g_zgs_turbo_snapshot.sh)
-            echo "Turbo Mode Snapshot installation completed."
-            ;;
-        3) 
             echo "Returning to main menu..."
             return
             ;;
