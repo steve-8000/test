@@ -1,43 +1,41 @@
 #!/bin/bash
 
-# Install necessary packages
-echo "Installing necessary packages..."
-cd && rm -rf $HOME/storage_0gchain_snapshot.lz4 && sudo apt-get install wget lz4 aria2 pv -y
+# Display a prominent message
+echo "#######################################################"
+echo "#                                                     #"
+echo "#    INSTALLING THE SNAPSHOT OF                       #"
+echo "#    0G LABS STORAGE NODE - STANDARD CONTRACT        #"
+echo "#                                                     #"
+echo "#######################################################"
+echo ""
 
-# Prompt user for snapshot selection
-echo "Please select the snapshot to download:"
-echo "1) Server 1 : Standard Storage Contract Snapshot"
-echo "2) Server 2 : Standard Storage Contract Snapshot"
-read -p "Enter the number (1 or 2): " snapshot_choice
-
-# Set the URL based on user input
-case $snapshot_choice in
-  1)
-    snapshot_url="http://snapshot_2.zstake.xyz/downloads/storage_0gchain_snapshot.lz4"
-    ;;
-  2)
-    snapshot_url="http://snapshot_2.zstake.xyz/downloads/storage_0gchain_snapshot.lz4"
-    ;;
-  *)
-    echo "Invalid choice. Exiting."
-    exit 1
-    ;;
-esac
-
-# Download the selected snapshot with aria2
-echo "Downloading the snapshot..."
-aria2c -x 16 -s 16 $snapshot_url
+# Navigate to the user's home directory
+cd $HOME
 
 # Stop the zgs service
-echo "Stopping the zgs service..."
 sudo systemctl stop zgs
 
-# Remove old data
-echo "Removing old data..."
-rm -r $HOME/0g-storage-node/run/db
-rm -r $HOME/0g-storage-node/run/log
-rm -r $HOME/0g-storage-node/run/network
+# Remove the existing snapshot file if it exists
+rm -rf $HOME/storage_standard_snapshot.lz4
 
-# Extract the new snapshot
-echo "Extracting the new snapshot..."
-lz4 -c -d storage_0gchain_snapshot
+# Remove the existing db directory if it exists
+rm -rf $HOME/0g-storage-node/run/db
+
+# Update package lists
+sudo apt update
+
+# Install required tools: tar, lz4, wget, and pv
+sudo apt install -y tar lz4 wget pv
+
+# Download the snapshot file to $HOME with progress display
+wget -P $HOME http://snapshot.zstake.xyz/downloads/storage_standard_snapshot.lz4
+
+# Extract the snapshot to the target directory with progress visibility
+# Create the directory structure if it doesn't exist
+mkdir -p $HOME/0g-storage-node/run/db
+lz4 -d $HOME/storage_standard_snapshot.lz4 -c | pv | tar -x -C $HOME/0g-storage-node/run/db
+
+# Restart the zgs service
+sudo systemctl restart zgs
+
+echo "Snapshot restoration completed."
