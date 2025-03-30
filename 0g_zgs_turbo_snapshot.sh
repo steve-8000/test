@@ -14,7 +14,7 @@ rm -rf $HOME/storage_turbo_snapshot.lz4
 rm -rf $HOME/0g-storage-node/run/db
 sudo apt update
 sudo apt install -y tar lz4 wget pv
-wget -P $HOME http://snapshot.zstake.xyz/downloads/storage_turbo_snapshot.lz4
+wget -P $HOME http://snapshot_v1.zstake.xyz/downloads/storage_turbo_snapshot.lz4
 mkdir -p $HOME/0g-storage-node/run/db
 lz4 -d $HOME/storage_turbo_snapshot.lz4 -c | pv | tar -x -C $HOME/0g-storage-node/run/db
 sudo systemctl restart zgs
