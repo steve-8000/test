@@ -8,8 +8,9 @@ show_menu() {
     echo "4. Standard Mode(Reset Config.toml & Systemctl)"
     echo "5. Select RPC Endpoint"
     echo "6. Set Miner Key"
-    echo "7. Node Run & Show Logs"
-    echo "8. Exit"
+    echo "7. Snapshot Install (Turbo, Standard)"
+    echo "8. Node Run & Show Logs"
+    echo "9. Exit"
     echo "============================"
 }
 
@@ -96,7 +97,6 @@ standard_mode_reset() {
     echo "Resetting to Standard Mode..."
     rm -rf $HOME/0g-storage-node/run/config.toml
     curl -o $HOME/0g-storage-node/run/config.toml https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/0g_storage_config.toml
-    nano $HOME/0g-storage-node/run/config.toml
     echo "Config.toml has been reset to Standard Mode and opened for editing. Please save your changes in nano (Ctrl+O, Enter, Ctrl+X)."
 }
 
@@ -131,6 +131,35 @@ set_miner_key() {
     echo "Miner Key updated. You can start the service with 'sudo systemctl start zgs'."
 }
 
+snapshot_install() {
+    echo "===== Snapshot Install Menu ====="
+    echo "1. Standard Mode Snapshot Install"
+    echo "2. Turbo Mode Snapshot Install"
+    echo "3. Back to Main Menu"
+    echo "============================"
+    read -p "Select an option (1-3): " snap_choice
+    case $snap_choice in
+        1) 
+            echo "Installing Standard Mode Snapshot..."
+            source <(curl -s https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/0g_zgs_standard_snapshot.sh)
+            echo "Standard Mode Snapshot installation completed."
+            ;;
+        2) 
+            echo "Installing Turbo Mode Snapshot..."
+            source <(curl -s https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/0g_zgs_turbo_snapshot.sh)
+            echo "Turbo Mode Snapshot installation completed."
+            ;;
+        3) 
+            echo "Returning to main menu..."
+            return
+            ;;
+        *) 
+            echo "Invalid option. Returning to main menu."
+            return
+            ;;
+    esac
+}
+
 show_logs() {
     echo "Displaying logs..."
     sudo systemctl daemon-reload && sudo systemctl enable zgs && sudo systemctl start zgs
@@ -139,7 +168,7 @@ show_logs() {
 
 while true; do
     show_menu
-    read -p "Select an option (1-8): " choice
+    read -p "Select an option (1-9): " choice
     case $choice in
         1) install_node ;;
         2) update_node ;;
@@ -147,8 +176,9 @@ while true; do
         4) standard_mode_reset ;;
         5) select_rpc ;;
         6) set_miner_key ;;
-        7) show_logs ;;
-        8) echo "Exiting..."; exit 0 ;;
+        7) snapshot_install ;;
+        8) show_logs ;;
+        9) echo "Exiting..."; exit 0 ;;
         *) echo "Invalid option. Please try again." ;;
     esac
     echo ""
