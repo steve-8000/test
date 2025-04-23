@@ -20,11 +20,11 @@ install_node() {
     sudo apt-get install -y cargo git clang cmake build-essential openssl pkg-config libssl-dev
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     source $HOME/.cargo/env
-    git clone -b v0.8.7 https://github.com/0glabs/0g-storage-node.git
+    git clone -b v1.0.0 https://github.com/0glabs/0g-storage-node.git
     cd $HOME/0g-storage-node
     git stash
     git fetch --all --tags
-    git checkout e57f1e8
+    git checkout 347cd3e
     git submodule update --init
     cargo build --release
     rm -rf $HOME/0g-storage-node/run/config.toml
@@ -57,7 +57,7 @@ update_node() {
     cd $HOME/0g-storage-node
     git stash
     git fetch --all --tags
-    git checkout e57f1e8
+    git checkout 347cd3e
     git submodule update --init
     cargo build --release
     cp $HOME/0g-storage-node/run/config.toml.backup $HOME/0g-storage-node/run/config.toml
