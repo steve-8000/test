@@ -77,7 +77,7 @@ network_boot_nodes = ["/ip4/47.251.79.83/udp/1234/p2p/16Uiu2HAkvJYQABP1MdvfWfUZU
 #######################################################################
 
 # RPC endpoint to sync event logs on EVM compatible blockchain.
-# blockchain_rpc_endpoint = "http://127.0.0.1:8545"
+blockchain_rpc_endpoint = "https://evmrpc-testnet.0g.ai"
 
 # Flow contract address to sync event logs.
 log_contract_address = "0x56A565685C9992BF5ACafb940ff68922980DBBC5"
@@ -165,7 +165,7 @@ mine_contract_address = "0xB87E0e5657C25b4e132CB6c34134C0cB8A962AD6"
 #
 # Note, the corresponding address should have enough tokens to pay
 # transaction gas fee.
-miner_key = ""
+# miner_key = ""
 
 # Period for querying mine context on chain (in seconds)
 #
