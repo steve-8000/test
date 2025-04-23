@@ -5,12 +5,11 @@ show_menu() {
     echo "1. Install 0g-storage-node"
     echo "2. Update 0g-storage-node"
     echo "3. Turbo Mode(Reset Config.toml & Systemctl)"
-    echo "4. Standard Mode(Reset Config.toml & Systemctl)"
-    echo "5. Select RPC Endpoint"
-    echo "6. Set Miner Key"
-    echo "7. Snapshot Install (Standard)"
-    echo "8. Node Run & Show Logs"
-    echo "9. Exit"
+    echo "4. Select RPC Endpoint"
+    echo "5. Set Miner Key"
+    echo "6. Snapshot Install"
+    echo "7. Node Run & Show Logs"
+    echo "8. Exit"
     echo "============================"
 }
 
@@ -25,7 +24,7 @@ install_node() {
     cd $HOME/0g-storage-node
     git stash
     git fetch --all --tags
-    git checkout be14ba6
+    git checkout e57f1e8
     git submodule update --init
     cargo build --release
     rm -rf $HOME/0g-storage-node/run/config.toml
@@ -58,7 +57,7 @@ update_node() {
     cd $HOME/0g-storage-node
     git stash
     git fetch --all --tags
-    git checkout be14ba6
+    git checkout e57f1e8
     git submodule update --init
     cargo build --release
     cp $HOME/0g-storage-node/run/config.toml.backup $HOME/0g-storage-node/run/config.toml
@@ -93,23 +92,16 @@ EOF
     echo "Config.toml and Systemctl have been reset to Turbo Mode. You can start the service with 'sudo systemctl start zgs'."
 }
 
-standard_mode_reset() {
-    echo "Resetting to Standard Mode..."
-    rm -rf $HOME/0g-storage-node/run/config.toml
-    curl -o $HOME/0g-storage-node/run/config.toml https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/0g_storage_config.toml
-    echo "Config.toml has been reset to Standard Mode and opened for editing. Please save your changes in nano (Ctrl+O, Enter, Ctrl+X)."
-}
-
 select_rpc() {
     echo "Select an RPC Endpoint:"
     echo "1. https://evmrpc-testnet.0g.ai"
-    echo "2. https://16600.rpc.thirdweb.com"
-    echo "3. https://og-testnet-evm.itrocket.net:443"
+    echo "2. "
+    echo "3. "
     read -p "Enter your choice (1-3): " rpc_choice
     case $rpc_choice in
         1) rpc="https://evmrpc-testnet.0g.ai" ;;
-        2) rpc="https://16600.rpc.thirdweb.com" ;;
-        3) rpc="https://og-testnet-evm.itrocket.net:443" ;;
+        2) rpc=" " ;;
+        3) rpc=" " ;;
         *) echo "Invalid choice. Exiting."; return ;;
     esac
     sed -i "s|^blockchain_rpc_endpoint = .*|blockchain_rpc_endpoint = \"$rpc\"|g" ~/0g-storage-node/run/config.toml
@@ -133,7 +125,7 @@ set_miner_key() {
 
 snapshot_install() {
     echo "===== Snapshot Install Menu ====="
-    echo "1. Standard Mode Snapshot Install"
+    echo "1. Turbo Mode Snapshot Install"
     echo "2. Back to Main Menu"
     echo "============================"
     read -p "Select an option (1-2): " snap_choice
@@ -141,7 +133,7 @@ snapshot_install() {
         1) 
             echo "Installing Standard Mode Snapshot..."
             source <(curl -s https://raw.githubusercontent.com/zstake-xyz/test/refs/heads/main/0g_zgs_standard_snapshot.sh)
-            echo "Standard Mode Snapshot installation completed."
+            echo "Turbo Mode Snapshot installation completed."
             ;;
         2) 
             echo "Returning to main menu..."
@@ -167,12 +159,11 @@ while true; do
         1) install_node ;;
         2) update_node ;;
         3) reset_config_systemctl ;;
-        4) standard_mode_reset ;;
-        5) select_rpc ;;
-        6) set_miner_key ;;
-        7) snapshot_install ;;
-        8) show_logs ;;
-        9) echo "Exiting..."; exit 0 ;;
+        4) select_rpc ;;
+        5) set_miner_key ;;
+        6) snapshot_install ;;
+        7) show_logs ;;
+        8) echo "Exiting..."; exit 0 ;;
         *) echo "Invalid option. Please try again." ;;
     esac
     echo ""
