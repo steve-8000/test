@@ -4,7 +4,7 @@
 echo "#######################################################"
 echo "#                                                     #"
 echo "#    INSTALLING THE SNAPSHOT OF                       #"
-echo "#    0G LABS STORAGE NODE - STANDARD CONTRACT        #"
+echo "#    0G LABS STORAGE NODE - V3                        #"
 echo "#                                                     #"
 echo "#######################################################"
 echo ""
