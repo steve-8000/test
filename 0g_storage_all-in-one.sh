@@ -24,7 +24,7 @@ install_node() {
     cd $HOME/0g-storage-node
     git stash
     git fetch --all --tags
-    git checkout 347cd3e
+    git checkout 7972bf8
     git submodule update --init
     cargo build --release
     rm -rf $HOME/0g-storage-node/run/config.toml
@@ -57,7 +57,7 @@ update_node() {
     cd $HOME/0g-storage-node
     git stash
     git fetch --all --tags
-    git checkout 347cd3e
+    git checkout 7972bf8
     git submodule update --init
     cargo build --release
     cp $HOME/0g-storage-node/run/config.toml.backup $HOME/0g-storage-node/run/config.toml
