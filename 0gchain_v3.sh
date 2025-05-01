@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# Prompt user for MONIKER value
+read -p "Enter your MONIKER value: " MONIKER
+
+# Change to home directory
+cd $HOME
+
+# Remove existing galileo and .0gchaind directories if they exist
+rm -rf galileo
+rm -rf .0gchaind
+
+# Download and extract Galileo node package
+wget https://github.com/0glabs/0gchain-ng/releases/download/v1.0.1/galileo-v1.0.1.tar.gz
+tar -xzvf galileo-v1.0.1.tar.gz -C $HOME
+cd galileo
+
+# Copy files to galileo/0g-home directory
+cp -r 0g-home/* $HOME/galileo/0g-home/
+
+# Set permissions for geth and 0gchaind binaries
+sudo chmod 777 ./bin/geth
+sudo chmod 777 ./bin/0gchaind
+
+# Initialize Geth with genesis file
+./bin/geth init --datadir $HOME/galileo/0g-home/geth-home ./genesis.json
+
+# Initialize 0gchaind with user-provided Zstake_RPC value
+./bin/0gchaind init "$MONIKER" --home $HOME/galileo/tmp
+
+# Copy node files to 0gchaind home directory
+cp $HOME/galileo/tmp/data/priv_validator_state.json $HOME/galileo/0g-home/0gchaind-home/data/
+cp $HOME/galileo/tmp/config/node_key.json $HOME/galileo/0g-home/0gchaind-home/config/
+cp $HOME/galileo/tmp/config/priv_validator_key.json $HOME/galileo/0g-home/0gchaind-home/config/
+
+# Update seeds in 0gchain config file
+SEEDS="b30fb241f3c5aee0839c0ea55bd7ca18e5c855c1@8.218.94.246:26656"
+sed -i -e "/^\[p2p\]/,/^\[/{s/^[[:space:]]*seeds *=.*/seeds = \"$SEEDS\"/}" $HOME/.0gchain/config/config.toml
+
+# Create systemd service file for 0gchaind
+sudo tee /etc/systemd/system/0gchaind.service > /dev/null <<EOF
+[Unit]
+Description=0gchaind Node Service
+After=network-online.target
+
+[Service]
+User=$USER
+ExecStart=/bin/bash -c 'cd ~/galileo && CHAIN_SPEC=devnet ./bin/0gchaind start \
+    --rpc.laddr tcp://0.0.0.0:26657 \
+    --beacon-kit.kzg.trusted-setup-path=kzg-trusted-setup.json \
+    --beacon-kit.engine.jwt-secret-path=jwt-secret.hex \
+    --beacon-kit.kzg.implementation=crate-crypto/go-kzg-4844 \
+    --beacon-kit.block-store-service.enabled \
+    --beacon-kit.node-api.enabled \
+    --beacon-kit.node-api.logging \
+    --beacon-kit.node-api.address 0.0.0.0:3500 \
+    --pruning=nothing \
+    --home \$HOME/galileo/0g-home/0gchaind-home \
+    --p2p.seeds b30fb241f3c5aee0839c0ea55bd7ca18e5c855c1@8.218.94.246:26656'
+Restart=always
+RestartSec=3
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Create systemd service file for 0ggeth
+sudo tee /etc/systemd/system/0ggeth.service > /dev/null <<EOF
+[Unit]
+Description=0g Geth Node Service
+After=network-online.target
+
+[Service]
+User=$USER
+ExecStart=/bin/bash -c 'cd ~/galileo && ./bin/geth --config geth-config.toml --datadir \$HOME/galileo/0g-home/geth-home --networkid 80087'
+Restart=always
+RestartSec=3
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload systemd, enable, and start 0ggeth service
+sudo systemctl daemon-reload
+sudo systemctl enable 0ggeth.service
+sudo systemctl start 0ggeth.service
+
+# Display logs for 0gchaind and 0ggeth services
+journalctl -u 0gchaind -u 0ggeth -f
