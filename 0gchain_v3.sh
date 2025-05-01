@@ -4,7 +4,7 @@
 read -p "Enter your MONIKER value: " MONIKER
 
 # Get the server's public IP address
-SERVER_IP=$(curl -s ifconfig.me)
+SERVER_IP=$(hostname -I | awk '{print $1}')
 
 # Change to home directory
 cd $HOME
