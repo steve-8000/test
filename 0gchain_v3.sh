@@ -12,6 +12,8 @@ cd $HOME
 # Remove existing galileo and .0gchaind directories if they exist
 rm -rf galileo
 rm -rf .0gchaind
+rm -r $HOME/go/bin/0gchaind
+rm -r $HOME/.bash_profile
 
 # Download and extract Galileo node package
 wget https://github.com/0glabs/0gchain-ng/releases/download/v1.0.1/galileo-v1.0.1.tar.gz
