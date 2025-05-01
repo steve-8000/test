@@ -14,6 +14,7 @@ rm -rf galileo
 rm -rf .0gchaind
 rm -r $HOME/go/bin/*
 rm -r $HOME/.bash_profile
+sudo rm /usr/local/bin/0gchaind
 
 # Download and extract Galileo node package
 wget https://github.com/0glabs/0gchain-ng/releases/download/v1.0.1/galileo-v1.0.1.tar.gz
