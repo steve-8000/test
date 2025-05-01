@@ -10,6 +10,7 @@ SERVER_IP=$(hostname -I | awk '{print $1}')
 cd $HOME
 
 # Remove existing galileo and .0gchaind directories if they exist
+sudo systemctl stop 0gd && sudo systemctl disable 0gd
 rm -rf galileo
 rm -rf .0gchaind
 rm -r $HOME/go/bin/*
