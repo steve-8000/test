@@ -3,6 +3,9 @@
 # Prompt user for MONIKER value
 read -p "Enter your MONIKER value: " MONIKER
 
+# Get the server's public IP address
+SERVER_IP=$(curl -s ifconfig.me)
+
 # Change to home directory
 cd $HOME
 
@@ -25,7 +28,7 @@ sudo chmod 777 ./bin/0gchaind
 # Initialize Geth with genesis file
 ./bin/geth init --datadir $HOME/galileo/0g-home/geth-home ./genesis.json
 
-# Initialize 0gchaind with user-provided Zstake_RPC value
+# Initialize 0gchaind with user-provided MONIKER value
 ./bin/0gchaind init "$MONIKER" --home $HOME/galileo/tmp
 
 # Copy node files to 0gchaind home directory
@@ -56,6 +59,7 @@ ExecStart=/bin/bash -c 'cd ~/galileo && CHAIN_SPEC=devnet ./bin/0gchaind start \
     --beacon-kit.node-api.address 0.0.0.0:3500 \
     --pruning=nothing \
     --home \$HOME/galileo/0g-home/0gchaind-home \
+    --p2p.external_address $SERVER_IP:26656 \
     --p2p.seeds b30fb241f3c5aee0839c0ea55bd7ca18e5c855c1@8.218.94.246:26656'
 Restart=always
 RestartSec=3
@@ -82,5 +86,10 @@ LimitNOFILE=4096
 WantedBy=multi-user.target
 EOF
 
-# Reload systemd, enable, and start 0ggeth service
-sudo systemctl daemon-reload && sudo systemctl enable 0ggeth.service && sudo systemctl start 0ggeth.service && sudo systemctl enable 0gchaind.service && sudo systemctl start 0gchaind.service && journalctl -u 0gchaind -u 0ggeth -f
+# Reload systemd, enable, and start services
+sudo systemctl daemon-reload
+sudo systemctl enable 0ggeth.service
+sudo systemctl start 0ggeth.service
+sudo systemctl enable 0gchaind.service
+sudo systemctl start 0gchaind.service
+journalctl -u 0gchaind -u 0ggeth -f
