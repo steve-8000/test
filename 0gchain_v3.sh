@@ -83,9 +83,4 @@ WantedBy=multi-user.target
 EOF
 
 # Reload systemd, enable, and start 0ggeth service
-sudo systemctl daemon-reload
-sudo systemctl enable 0ggeth.service
-sudo systemctl start 0ggeth.service
-
-# Display logs for 0gchaind and 0ggeth services
-journalctl -u 0gchaind -u 0ggeth -f
+sudo systemctl daemon-reload && sudo systemctl enable 0ggeth.service && sudo systemctl start 0ggeth.service && sudo systemctl enable 0gchaind.service && sudo systemctl start 0gchaind.service && journalctl -u 0gchaind -u 0ggeth -f
