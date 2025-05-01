@@ -40,6 +40,10 @@ cp $HOME/galileo/tmp/config/priv_validator_key.json $HOME/galileo/0g-home/0gchai
 SEEDS="b30fb241f3c5aee0839c0ea55bd7ca18e5c855c1@8.218.94.246:26656"
 sed -i -e "/^\[p2p\]/,/^\[/{s/^[[:space:]]*seeds *=.*/seeds = \"$SEEDS\"/}" $HOME/.0gchain/config/config.toml
 
+
+echo 'export PATH=$PATH:$HOME/galileo/bin' >> $HOME/.bash_profile
+source $HOME/.bash_profile
+
 # Create systemd service file for 0gchaind
 sudo tee /etc/systemd/system/0gchaind.service > /dev/null <<EOF
 [Unit]
