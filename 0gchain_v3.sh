@@ -12,7 +12,7 @@ cd $HOME
 # Remove existing galileo and .0gchaind directories if they exist
 sudo systemctl stop 0gd && sudo systemctl disable 0gd
 sudo systemctl stop 0ggeth && sudo systemctl disable 0ggeth
-sudo systemctl stop 0gchqind && sudo systemctl disable 0gchaind
+sudo systemctl stop 0gchaind && sudo systemctl disable 0gchaind
 rm -rf galileo
 rm -r galileo-v1.0.1.tar.gz
 rm -r galileo-v1.1.0.tar.gz
