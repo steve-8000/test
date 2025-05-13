@@ -19,7 +19,7 @@ sudo rm /usr/local/bin/0gchaind
 
 # Download and extract Galileo node package
 wget https://github.com/0glabs/0gchain-ng/releases/download/v1.0.1/galileo-v1.0.1.tar.gz
-tar -xzvf galileo-v1.0.1.tar.gz -C $HOME
+tar -xzvf galileo-v1.1.0.tar.gz -C $HOME
 cd galileo
 
 # Copy files to galileo/0g-home directory
@@ -39,7 +39,6 @@ sudo chmod 777 ./bin/0gchaind
 cp $HOME/galileo/tmp/data/priv_validator_state.json $HOME/galileo/0g-home/0gchaind-home/data/
 cp $HOME/galileo/tmp/config/node_key.json $HOME/galileo/0g-home/0gchaind-home/config/
 cp $HOME/galileo/tmp/config/priv_validator_key.json $HOME/galileo/0g-home/0gchaind-home/config/
-
 
 echo 'export PATH=$PATH:$HOME/galileo/bin' >> $HOME/.bash_profile
 source $HOME/.bash_profile
@@ -81,7 +80,11 @@ After=network-online.target
 
 [Service]
 User=$USER
-ExecStart=/bin/bash -c 'cd ~/galileo && ./bin/geth --config geth-config.toml --datadir \$HOME/galileo/0g-home/geth-home --networkid 80087'
+ExecStart=/bin/bash -c 'cd ~/galileo && ./bin/geth --config geth-config.toml \
+    --nat extip:$SERVER_IP \
+    --bootnodes enode://de7b86d8ac452b1413983049c20eafa2ea0851a3219c2cc12649b971c1677bd83fe24c5331e078471e52a94d95e8cde84cb9d866574fec957124e57ac6056699@8.218.88.60:30303 \
+    --datadir \$HOME/galileo/0g-home/geth-home \
+    --networkid 16601'
 Restart=always
 RestartSec=3
 LimitNOFILE=4096
