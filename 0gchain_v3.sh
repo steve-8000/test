@@ -61,7 +61,7 @@ ExecStart=/bin/bash -c 'cd ~/galileo && CHAIN_SPEC=devnet ./bin/0gchaind start \
     --beacon-kit.node-api.logging \
     --beacon-kit.node-api.address 0.0.0.0:3500 \
     --pruning=nothing \
-    --home \$HOME/galileo/0g-home/0gchaind-home \
+    --home $HOME/galileo/0g-home/0gchaind-home \
     --p2p.external_address $SERVER_IP:26656 \
     --p2p.seeds b30fb241f3c5aee0839c0ea55bd7ca18e5c855c1@8.218.94.246:26656'
 Restart=always
@@ -83,7 +83,7 @@ User=$USER
 ExecStart=/bin/bash -c 'cd ~/galileo && ./bin/geth --config geth-config.toml \
     --nat extip:$SERVER_IP \
     --bootnodes enode://de7b86d8ac452b1413983049c20eafa2ea0851a3219c2cc12649b971c1677bd83fe24c5331e078471e52a94d95e8cde84cb9d866574fec957124e57ac6056699@8.218.88.60:30303 \
-    --datadir \$HOME/galileo/0g-home/geth-home \
+    --datadir $HOME/galileo/0g-home/geth-home \
     --networkid 16601'
 Restart=always
 RestartSec=3
