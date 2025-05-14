@@ -24,7 +24,7 @@ install_node() {
     cd $HOME/0g-storage-node
     git stash
     git fetch --all --tags
-    git checkout 7972bf8
+    git checkout 347cd3e
     git submodule update --init
     cargo build --release
     rm -rf $HOME/0g-storage-node/run/config.toml
