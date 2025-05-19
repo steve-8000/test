@@ -15,15 +15,15 @@ sudo systemctl stop 0ggeth && sudo systemctl disable 0ggeth
 sudo systemctl stop 0gchaind && sudo systemctl disable 0gchaind
 rm -rf galileo
 rm -r galileo-v1.0.1.tar.gz
-rm -r galileo-v1.1.0.tar.gz
+rm -r galileo-v1.1.1.tar.gz
 rm -rf .0gchaind
 rm -r $HOME/go/bin/*
 rm -r $HOME/.bash_profile
 sudo rm /usr/local/bin/0gchaind
 
 # Download and extract Galileo node package
-wget https://github.com/0glabs/0gchain-ng/releases/download/v1.1.0/galileo-v1.1.0.tar.gz
-tar -xzvf galileo-v1.1.0.tar.gz -C $HOME
+wget https://github.com/0glabs/0gchain-ng/releases/download/v1.1.1/galileo-v1.1.0.tar.gz
+tar -xzvf galileo-v1.1.1.tar.gz -C $HOME
 cd galileo
 
 # Copy files to galileo/0g-home directory
