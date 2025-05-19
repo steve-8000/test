@@ -57,7 +57,6 @@ After=network-online.target
 User=$USER
 ExecStart=/bin/bash -c 'cd ~/galileo && CHAIN_SPEC=devnet ./bin/0gchaind start \
     --rpc.laddr tcp://0.0.0.0:26657 \
-    --beacon-kit.kzg.trusted-setup-path=kzg-trusted-setup.json \
     --beacon-kit.engine.jwt-secret-path=jwt-secret.hex \
     --beacon-kit.kzg.implementation=crate-crypto/go-kzg-4844 \
     --beacon-kit.block-store-service.enabled \
