@@ -22,7 +22,7 @@ rm -r $HOME/.bash_profile
 sudo rm /usr/local/bin/0gchaind
 
 # Download and extract Galileo node package
-wget https://github.com/0glabs/0gchain-ng/releases/download/v1.1.1/galileo-v1.1.1.tar.gz
+wget https://github.com/0glabs/0gchain-NG/releases/download/v1.1.1/galileo-v1.1.1.tar.gz
 tar -xzvf galileo-v1.1.1.tar.gz -C $HOME
 cd galileo
 
