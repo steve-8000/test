@@ -57,13 +57,6 @@ After=network-online.target
 User=$USER
 ExecStart=/bin/bash -c 'cd ~/galileo && CHAIN_SPEC=devnet ./bin/0gchaind start \
     --rpc.laddr tcp://0.0.0.0:26657 \
-    --beacon-kit.engine.jwt-secret-path=jwt-secret.hex \
-    --beacon-kit.kzg.implementation=crate-crypto/go-kzg-4844 \
-    --beacon-kit.block-store-service.enabled \
-    --beacon-kit.node-api.enabled \
-    --beacon-kit.node-api.logging \
-    --beacon-kit.node-api.address 0.0.0.0:3500 \
-    --pruning=nothing \
     --home $HOME/galileo/0g-home/0gchaind-home \
     --p2p.external_address $SERVER_IP:26656 \
     --p2p.seeds 85a9b9a1b7fa0969704db2bc37f7c100855a75d9@8.218.88.60:26656'
