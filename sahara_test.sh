@@ -2,7 +2,7 @@
 
 while true; do 
   local_height=$(saharad status | jq -r .sync_info.latest_block_height)
-  response=$(curl -s -X POST https://testnet-cos-rpc1.saharalabs.ai \
+  response=$(curl -s -X POST https://testnet-rpc2.saharalabs.ai \
     -H "Content-Type: application/json" \
     --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}')
     hex_height=$(echo "$response" | jq -r '.result') 
