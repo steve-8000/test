@@ -80,11 +80,11 @@ network_boot_nodes = ["/ip4/47.251.79.83/udp/1234/p2p/16Uiu2HAkvJYQABP1MdvfWfUZU
 blockchain_rpc_endpoint = "https://evmrpc-testnet.0g.ai"
 
 # Flow contract address to sync event logs.
-log_contract_address = "0x5f1D96895e442FC0168FA2F9fb1EBeF93Cb5035e"
+log_contract_address = "0xbD75117F80b4E22698D0Cd7612d92BDb8eaff628"
 
 # Block number to sync event logs from blockchain. Generally, this is
 # the block number when flow contract deployed.
-log_sync_start_block_number = 1
+log_sync_start_block_number = 326165
 
 # Number of blocks to confirm a transaction.
 # confirmation_block_count = 3
@@ -158,7 +158,7 @@ log_sync_start_block_number = 1
 #######################################################################
 
 # Mine contract address for incentive.
-mine_contract_address = "0xB0F6c3E2E7Ada3b9a95a1582bF6562e24A62D334"
+mine_contract_address = "0x3A0d1d67497Ad770d6f72e7f4B8F0BAbaa2A649C"
 
 # Miner key is used to sign blockchain transaction for incentive.
 # The value should be a hex string of length 64 without 0x prefix.
@@ -194,7 +194,7 @@ db_max_num_sectors = 8000000000
 # This only applies if there is no stored shard config in db.
 # shard_position = "0/4"
 
-reward_contract_address = "0xdf758Bd14306482DeCbeF186eC6f18e4e79aaaE6"
+reward_contract_address = "0xd3D4D91125D76112AE256327410Dd0414Ee08Cb4"
 # The time interval to check if we should half `shard_position` to prune data.
 #
 # prune_check_time_s = 60
