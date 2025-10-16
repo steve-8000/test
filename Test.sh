@@ -3,36 +3,27 @@ set -Eeuo pipefail
 
 # ------------------------------------------------------------
 # Ubuntu System Environment Test (disk + memory + network)
-# Requires: fio, jq, (Ookla) speedtest, coreutils, awk
+# Auto-install dependencies if missing
 # ------------------------------------------------------------
 
-# ===== Detect sourced =====
 is_sourced() { [[ "${BASH_SOURCE[0]}" != "$0" ]]; }
-# smart exit that won't kill parent shell if sourced
-fatal() {
-  local code=${1:-1}; shift || true
-  [[ $# -gt 0 ]] && echo -e "$*" 1>&2
-  if is_sourced; then return "$code"; else exit "$code"; fi
-}
+fatal() { local code=${1:-1}; shift || true; [[ $# -gt 0 ]] && echo -e "$*" 1>&2; if is_sourced; then return "$code"; else exit "$code"; fi; }
 
-# ===== Config =====
-TEST_DIR="${TEST_DIR:-/opt/charon}"        # 디스크 테스트 파일 경로
-TEST_FILE_SIZE_MB="${TEST_FILE_SIZE_MB:-4096}" # 각 테스트 파일 크기(MB)
+TEST_DIR="${TEST_DIR:-/opt/charon}"
+TEST_FILE_SIZE_MB="${TEST_FILE_SIZE_MB:-4096}"
 FIO_JOBS="${FIO_JOBS:-8}"
-FIO_RUNTIME="${FIO_RUNTIME:-10}"           # IOPS 테스트 시간(s)
-SPEEDTEST_SERVER_ID="${SPEEDTEST_SERVER_ID:-}" # 특정 서버 지정시 설정
+FIO_RUNTIME="${FIO_RUNTIME:-10}"
+SPEEDTEST_SERVER_ID="${SPEEDTEST_SERVER_ID:-}"
 
-# 임계치(환경에 맞게 조정)
-THR_DISK_WRITE_MBPS_GOOD=${THR_DISK_WRITE_MBPS_GOOD:-800}   # 순차 쓰기
-THR_DISK_READ_MBPS_GOOD=${THR_DISK_READ_MBPS_GOOD:-1500}    # 순차 읽기
-THR_WRITE_IOPS_GOOD=${THR_WRITE_IOPS_GOOD:-5000}            # 랜덤 4k 쓰기 IOPS
-THR_READ_IOPS_GOOD=${THR_READ_IOPS_GOOD:-8000}              # 랜덤 4k 읽기 IOPS
+THR_DISK_WRITE_MBPS_GOOD=${THR_DISK_WRITE_MBPS_GOOD:-800}
+THR_DISK_READ_MBPS_GOOD=${THR_DISK_READ_MBPS_GOOD:-1500}
+THR_WRITE_IOPS_GOOD=${THR_WRITE_IOPS_GOOD:-5000}
+THR_READ_IOPS_GOOD=${THR_READ_IOPS_GOOD:-8000}
 THR_NET_LATENCY_MS_GOOD=${THR_NET_LATENCY_MS_GOOD:-10}
 THR_NET_DOWN_MBPS_GOOD=${THR_NET_DOWN_MBPS_GOOD:-500}
 THR_NET_UP_MBPS_GOOD=${THR_NET_UP_MBPS_GOOD:-500}
 THR_MEM_AVAILABLE_MB_GOOD=${THR_MEM_AVAILABLE_MB_GOOD:-4096}
 
-# ===== Output helpers =====
 C_RESET="\033[0m"; C_GREEN="\033[32m"; C_YELLOW="\033[33m"; C_RED="\033[31m"
 
 now() { date +"%H:%M:%S.%3N"; }
@@ -44,6 +35,16 @@ rate_status_latency() { local v=$1 g=$2; (( $(awk -v v="$v" -v g="$g" 'BEGIN{pri
 
 print_row() { printf "%-45s %12s %s\n" "$1" "$2" "$3"; }
 
+install_deps() {
+  echo -e "${C_YELLOW}Installing missing dependencies...${C_RESET}"
+  sudo apt-get update -y
+  sudo apt-get install -y fio jq curl
+  if ! command -v speedtest >/dev/null 2>&1; then
+    curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
+    sudo apt-get install -y speedtest
+  fi
+}
+
 check_deps() {
   local missing=()
   command -v fio >/dev/null 2>&1 || missing+=("fio")
@@ -51,15 +52,7 @@ check_deps() {
   command -v speedtest >/dev/null 2>&1 || missing+=("speedtest (Ookla CLI)")
   if ((${#missing[@]})); then
     echo -e "${C_YELLOW}Missing dependencies:${C_RESET} ${missing[*]}"
-    echo "Install on Ubuntu:"
-    echo "  sudo apt-get update && sudo apt-get install -y fio jq"
-    echo "  # Install Ookla speedtest: https://www.speedtest.net/apps/cli"
-    # speedtest만 빠진 경우는 네트워크 지표 없이 계속 실행할 수 있도록 경고만 하고 진행
-    if ((${#missing[@]}==1)) && [[ "${missing[0]}" == *speedtest* ]]; then
-      echo -e "${C_YELLOW}speedtest 미설치: 네트워크 측정은 건너뜁니다.${C_RESET}"
-      return 0
-    fi
-    fatal 1
+    install_deps
   fi
 }
 
@@ -67,57 +60,26 @@ prepare_dir() {
   sudo mkdir -p "$TEST_DIR" >/dev/null 2>&1 || mkdir -p "$TEST_DIR"
 }
 
-# ===== Disk tests (fio JSON) =====
 disk_write_speed() {
-  fio --name=seqwrite \
-      --filename="$TEST_DIR/fio_testfile" \
-      --size=${TEST_FILE_SIZE_MB}m \
-      --bs=1m --rw=write --iodepth=64 --numjobs=${FIO_JOBS} \
-      --direct=1 --ioengine=libaio \
-      --group_reporting=1 --output-format=json 2>/dev/null |
-  jq -r '[.jobs[].write.bw_bytes] | add / 1048576 | @json'
+  fio --name=seqwrite --filename="$TEST_DIR/fio_testfile" --size=${TEST_FILE_SIZE_MB}m --bs=1m --rw=write --iodepth=64 --numjobs=${FIO_JOBS} --direct=1 --ioengine=libaio --group_reporting=1 --output-format=json 2>/dev/null | jq -r '[.jobs[].write.bw_bytes] | add / 1048576 | @json'
 }
 
 disk_write_iops() {
-  fio --name=randwrite \
-      --filename="$TEST_DIR/fio_testfile" \
-      --size=${TEST_FILE_SIZE_MB}m \
-      --bs=4k --rw=randwrite --iodepth=64 --numjobs=${FIO_JOBS} \
-      --direct=1 --ioengine=libaio --time_based=1 --runtime=${FIO_RUNTIME} \
-      --group_reporting=1 --output-format=json 2>/dev/null |
-  jq -r '[.jobs[].write.iops] | add | @json'
+  fio --name=randwrite --filename="$TEST_DIR/fio_testfile" --size=${TEST_FILE_SIZE_MB}m --bs=4k --rw=randwrite --iodepth=64 --numjobs=${FIO_JOBS} --direct=1 --ioengine=libaio --time_based=1 --runtime=${FIO_RUNTIME} --group_reporting=1 --output-format=json 2>/dev/null | jq -r '[.jobs[].write.iops] | add | @json'
 }
 
 disk_read_speed() {
-  fio --name=seqread \
-      --filename="$TEST_DIR/fio_testfile" \
-      --size=${TEST_FILE_SIZE_MB}m \
-      --bs=1m --rw=read --iodepth=64 --numjobs=${FIO_JOBS} \
-      --direct=1 --ioengine=libaio \
-      --group_reporting=1 --output-format=json 2>/dev/null |
-  jq -r '[.jobs[].read.bw_bytes] | add / 1048576 | @json'
+  fio --name=seqread --filename="$TEST_DIR/fio_testfile" --size=${TEST_FILE_SIZE_MB}m --bs=1m --rw=read --iodepth=64 --numjobs=${FIO_JOBS} --direct=1 --ioengine=libaio --group_reporting=1 --output-format=json 2>/dev/null | jq -r '[.jobs[].read.bw_bytes] | add / 1048576 | @json'
 }
 
 disk_read_iops() {
-  fio --name=randread \
-      --filename="$TEST_DIR/fio_testfile" \
-      --size=${TEST_FILE_SIZE_MB}m \
-      --bs=4k --rw=randread --iodepth=64 --numjobs=${FIO_JOBS} \
-      --direct=1 --ioengine=libaio --time_based=1 --runtime=${FIO_RUNTIME} \
-      --group_reporting=1 --output-format=json 2>/dev/null |
-  jq -r '[.jobs[].read.iops] | add | @json'
+  fio --name=randread --filename="$TEST_DIR/fio_testfile" --size=${TEST_FILE_SIZE_MB}m --bs=4k --rw=randread --iodepth=64 --numjobs=${FIO_JOBS} --direct=1 --ioengine=libaio --time_based=1 --runtime=${FIO_RUNTIME} --group_reporting=1 --output-format=json 2>/dev/null | jq -r '[.jobs[].read.iops] | add | @json'
 }
 
-# ===== Memory =====
-mem_info() {
-  awk '/MemTotal:/{t=$2} /MemAvailable:/{a=$2} END{printf("%d,%d\n", a/1024, t/1024)}' /proc/meminfo
-}
+mem_info() { awk '/MemTotal:/{t=$2} /MemAvailable:/{a=$2} END{printf("%d,%d\n", a/1024, t/1024)}' /proc/meminfo; }
 
-# ===== Network (Ookla speedtest CLI) =====
 net_speedtest() {
-  if ! command -v speedtest >/dev/null 2>&1; then
-    return 1
-  fi
+  if ! command -v speedtest >/dev/null 2>&1; then return 1; fi
   if [[ -n "$SPEEDTEST_SERVER_ID" ]]; then
     speedtest --accept-license --accept-gdpr --server-id="$SPEEDTEST_SERVER_ID" --format=json
   else
@@ -125,7 +87,6 @@ net_speedtest() {
   fi
 }
 
-# ===== Main =====
 main() {
   local start_ts=$(date +%s%N)
   check_deps || true
@@ -151,6 +112,7 @@ main() {
     echo -e "${C_YELLOW}Network speedtest skipped or failed. Proceeding without network metrics.${C_RESET}" >&2
     net_json='{}'
   fi
+
   local server_name server_loc server_id server_dist_km latency_ms down_bps up_bps
   server_name=$(jq -r '.server.name // "N/A"' <<<"$net_json")
   server_loc=$(jq -r '.server.location // "N/A"' <<<"$net_json")
