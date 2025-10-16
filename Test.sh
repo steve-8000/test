@@ -9,7 +9,7 @@ set -Eeuo pipefail
 is_sourced() { [[ "${BASH_SOURCE[0]}" != "$0" ]]; }
 fatal() { local code=${1:-1}; shift || true; [[ $# -gt 0 ]] && echo -e "$*" 1>&2; if is_sourced; then return "$code"; else exit "$code"; fi; }
 
-TEST_DIR="${TEST_DIR:-/opt/charon}"
+TEST_DIR="${HOME}/charon_test"        # 디스크 테스트 파일 경로를 HOME으로 변경
 TEST_FILE_SIZE_MB="${TEST_FILE_SIZE_MB:-4096}"
 FIO_JOBS="${FIO_JOBS:-8}"
 FIO_RUNTIME="${FIO_RUNTIME:-10}"
@@ -57,7 +57,7 @@ check_deps() {
 }
 
 prepare_dir() {
-  sudo mkdir -p "$TEST_DIR" >/dev/null 2>&1 || mkdir -p "$TEST_DIR"
+  mkdir -p "$TEST_DIR"
 }
 
 disk_write_speed() {
